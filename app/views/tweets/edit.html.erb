@@ -1,10 +1,12 @@
 <div class="contents row">
-  <%= form_tag("/tweets/#{@tweet.id}", :method => :patch) do %>
-    <h3>
-      編集する
-    </h3>
-    <input placeholder="Image URL" type="text" name="image" value="<%= @tweet.image %>" autofocus="true"></input>
-    <textarea placeholder="text" name="text" cols="30" rows="10" ><%= @tweet.text %></textarea>
-    <input type="submit" value="SENT">
-  <% end %>
+  <div class="container">
+    <%= form_with(model: @tweet, local: true) do |form| %>
+      <h3>
+        編集する
+      </h3>
+      <%= form.text_field :image, placeholder: "Image Url" %>
+      <%= form.text_area :text, placeholder: "text" , rows: "10" %>
+      <%= form.submit "SEND" %>
+    <% end %>
+  </div>
 </div>

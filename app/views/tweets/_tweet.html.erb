@@ -1,6 +1,6 @@
-<div class="content__post" style="background-image: url(<%= tweet.image %>);">
-    <div class="more">
-      <span><%= image_tag 'arrow_top.png' %></span>
+<div class="content_post" style="background-image: url(<%= tweet.image %>);">
+  <div class="more">
+    <span><%= image_tag 'arrow_top.png' %></span>
     <ul class="more_list">
       <li>
         <%= link_to "詳細", tweet_path(tweet.id), method: :get %>
@@ -14,8 +14,8 @@
         </li>
       <% end %>
     </ul>
-    </div>
-    <%= simple_format(tweet.text) %>
+  </div>
+  <%= simple_format(tweet.text) %>
   <span class="name">
     <a href="/users/<%= tweet.user_id %>">
       <span>投稿者</span><%= tweet.user.nickname %>

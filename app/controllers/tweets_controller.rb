@@ -1,6 +1,6 @@
 class TweetsController < ApplicationController
 
-  before_action :redirect_to_index
+  # before_action :redirect_to_index, except: :index
 
   def index
     @tweets = Tweet.includes(:user).page(params[:page]).per(5).order("created_at DESC")
@@ -8,10 +8,11 @@ class TweetsController < ApplicationController
 
   def show
     @tweet = Tweet.find(params[:id])
-    @comment = @tweet.comments.includes(:user)
+    @comments = @tweet.comments.includes(:user)
   end
 
   def new
+    @tweet = Tweet.new
   end
 
   def create
@@ -34,7 +35,7 @@ class TweetsController < ApplicationController
 
   private
   def tweet_params
-    params.permit(:text)
+    params.permit(:text,:image)
   end
 
   def id_params
@@ -42,5 +43,6 @@ class TweetsController < ApplicationController
   end
 
   def redirect_to_index
-    redirect_to :action => "index" unless user_signed_in
+    redirect_to :action => "index" unless user_signed_in?
   end
+end
