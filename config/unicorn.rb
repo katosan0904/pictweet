@@ -1,34 +1,55 @@
-# ワーカーの数
-worker_processes 4
+#サーバ上でのアプリケーションコードが設置されているディレクトリを変数に入れておく
+app_path = File.expand_path('../../', __FILE__)
 
-# RAILS_ROOT を指定
-working_directory "/var/www/html/pictweet"
+#アプリケーションサーバの性能を決定する
+worker_processes 1
 
-# ソケット
-listen File.expand_path('tmp/sockets/unicorn.sock', ENV['RAILS_ROOT'])
-# pid
-pid File.expand_path('tmp/pids/unicorn.pid', ENV['RAILS_ROOT'])
+#アプリケーションの設置されているディレクトリを指定
+working_directory app_path
 
-# ログ
-stderr_path File.expand_path('log/unicorn.log', ENV['RAILS_ROOT'])
-stdout_path File.expand_path('log/unicorn.log', ENV['RAILS_ROOT'])
+#Unicornの起動に必要なファイルの設置場所を指定
+pid "#{app_path}/tmp/pids/unicorn.pid"
 
-# ダウンタイムなくす
+#ポート番号を指定
+listen 3000
+
+#エラーのログを記録するファイルを指定
+stderr_path "#{app_path}/log/unicorn.stderr.log"
+
+#通常のログを記録するファイルを指定
+stdout_path "#{app_path}/log/unicorn.stdout.log"
+
+#Railsアプリケーションの応答を待つ上限時間を設定
+timeout 60
+
+#以下は応用的な設定なので説明は割愛
+
 preload_app true
+GC.respond_to?(:copy_on_write_friendly=) && GC.copy_on_write_friendly = true
+
+check_client_connection false
+
+run_once = true
 
 before_fork do |server, worker|
-  defined?(ActiveRecord::Base) and ActiveRecord::Base.connection.disconnect!
+  defined?(ActiveRecord::Base) &&
+    ActiveRecord::Base.connection.disconnect!
 
-  old_pid = "#{ server.config[:pid] }.oldbin"
-  unless old_pid == server.pid
+  if run_once
+    run_once = false # prevent from firing again
+  end
+
+  old_pid = "#{server.config[:pid]}.oldbin"
+  if File.exist?(old_pid) && server.pid != old_pid
     begin
-      # SIGTTOU だと worker_processes が多いときおかしい気がする
-      Process.kill :QUIT, File.read(old_pid).to_i
-    rescue Errno::ENOENT, Errno::ESRCH
+      sig = (worker.nr + 1) >= server.worker_processes ? :QUIT : :TTOU
+      Process.kill(sig, File.read(old_pid).to_i)
+    rescue Errno::ENOENT, Errno::ESRCH => e
+      logger.error e
     end
   end
 end
 
-after_fork do |server, worker|
-  defined?(ActiveRecord::Base) and ActiveRecord::Base.establish_connection
+after_fork do |_server, _worker|
+  defined?(ActiveRecord::Base) && ActiveRecord::Base.establish_connection
 end

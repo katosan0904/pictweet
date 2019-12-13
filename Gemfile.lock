@@ -123,7 +123,6 @@ GEM
       kaminari-core (= 1.1.1)
     kaminari-core (1.1.1)
     kgio (2.11.2)
-    libv8 (3.16.14.19)
     loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -137,7 +136,7 @@ GEM
     mini_portile2 (2.4.0)
     minitest (5.11.3)
     multi_json (1.13.1)
-    mysql2 (0.5.2)
+    mysql2 (0.5.3)
     nio4r (2.4.0)
     nokogiri (1.10.4)
       mini_portile2 (~> 2.4.0)
@@ -185,7 +184,6 @@ GEM
     rb-inotify (0.10.0)
       ffi (~> 1.0)
     rdoc (6.1.1)
-    ref (2.0.0)
     regexp_parser (1.6.0)
     responders (3.0.0)
       actionpack (>= 5.0)
@@ -224,9 +222,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    therubyracer (0.12.3)
-      libv8 (~> 3.16.14.15)
-      ref
     thor (0.20.3)
     thread_safe (0.3.6)
     tilt (2.0.9)
@@ -237,7 +232,7 @@ GEM
       thread_safe (~> 0.1)
     uglifier (4.1.20)
       execjs (>= 0.3.0, < 3)
-    unicorn (5.5.1)
+    unicorn (5.4.1)
       kgio (~> 2.6)
       raindrops (~> 0.7)
     warden (1.2.8)
@@ -266,7 +261,7 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   kaminari
-  mysql2
+  mysql2 (= 0.5.3)
   pry-rails
   rails (= 5.2.1)
   rails-controller-testing
@@ -275,10 +270,9 @@ DEPENDENCIES
   sdoc
   spring
   sprockets
-  therubyracer
   turbolinks
   uglifier
-  unicorn
+  unicorn (= 5.4.1)
   web-console
 
 BUNDLED WITH
