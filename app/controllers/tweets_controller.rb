@@ -16,6 +16,8 @@ class TweetsController < ApplicationController
   end
 
   def create
+    @a=Tweet.new(image: tweet_params[:image], text: tweet_params[:text], user_id: current_user.id)
+    binding.pry
     Tweet.create(image: tweet_params[:image], text: tweet_params[:text], user_id: current_user.id)
   end
 
@@ -35,7 +37,10 @@ class TweetsController < ApplicationController
 
   private
   def tweet_params
-    params.permit(:text,:image)
+    params.require(:tweet).permit(
+      :text,
+      :image
+    )
   end
 
   def id_params

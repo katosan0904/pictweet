@@ -54,7 +54,8 @@ gem 'capistrano-rbenv'
 gem 'capistrano-bundler'
 gem 'capistrano-rails'
 gem 'capistrano3-unicorn'
-
+gem 'carrierwave'
+gem 'fog-aws'
 group :development do
   gem 'web-console'
 end
